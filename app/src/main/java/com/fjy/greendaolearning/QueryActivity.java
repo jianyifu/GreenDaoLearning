@@ -24,7 +24,9 @@ public class QueryActivity extends AppCompatActivity {
     private PushMsgAdapter adapter;
     private PushMsgDao pushMsgDao;
     private Query<PushMsg> msgQuery;
-    private Button doQueryAgain;
+    private QueryBuilder<PushMsg> qb;
+    private Button doQueryAgainBtn;
+    private Button doMultiThreadQueryBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +34,14 @@ public class QueryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_query);
         setUpViews();
         pushMsgDao = DBManager.getInstance().getDaoSession().getPushMsgDao();
-        QueryBuilder<PushMsg> qb = pushMsgDao.queryBuilder();
+        qb = pushMsgDao.queryBuilder();
         msgQuery = qb.where(PushMsgDao.Properties.Title.like("aa%")).offset(0).limit(20).build();
     }
 
     private void setUpViews() {
         doQueryBtn = (Button) findViewById(R.id.do_query_btn);
-        doQueryAgain = (Button) findViewById(R.id.do_query_again);
+        doQueryAgainBtn = (Button) findViewById(R.id.do_query_again_btn);
+        doMultiThreadQueryBtn = (Button) findViewById(R.id.do_multi_thread_query_btn);
         msgList = (RecyclerView) findViewById(R.id.msg_list);
         msgList.setLayoutManager(new LinearLayoutManager(this));
         adapter = new PushMsgAdapter(new PushMsgAdapter.MsgClickListener() {
@@ -54,12 +57,37 @@ public class QueryActivity extends AppCompatActivity {
                 doLimitOffsetQuery();
             }
         });
-        doQueryAgain.setOnClickListener(new View.OnClickListener() {
+        doQueryAgainBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 doLimitOffsetQueryWithDiffParams();
             }
         });
+        doMultiThreadQueryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doMultiThreadQuery();
+            }
+        });
+    }
+
+    private void doMultiThreadQuery() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //Every time, forCurrentThread() is called, the parameters are set to the initial parameters at the time the query was built using its builder.
+//                final List<PushMsg> msgs = msgQuery.list();//org.greenrobot.greendao.DaoException: Method may be called only in owner thread, use forCurrentThread to get an instance for this thread
+//                final List<PushMsg> msgs = qb.build().forCurrentThread().list(); // results same with doLimitOffsetQuery()
+//                final List<PushMsg> msgs = qb.build().setParameter(0,"dd%").forCurrentThread().list(); // results same with doLimitOffsetQuery()
+                final List<PushMsg> msgs = qb.build().forCurrentThread().setParameter(0,"dd%").list();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.setMsgs(msgs);
+                    }
+                });
+            }
+        }).start();
     }
 
     private void doLimitOffsetQueryWithDiffParams() {

@@ -11,10 +11,15 @@
         android:layout_height="wrap_content"
         android:text="do query limit offset"/>
     <Button
-        android:id="@+id/do_query_again"
+        android:id="@+id/do_query_again_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="do query with same query but different params"/>
+    <Button
+        android:id="@+id/do_multi_thread_query_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Executing queries in multiple threads"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/msg_list"
         android:layout_width="match_parent"
