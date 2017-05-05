@@ -44,12 +44,12 @@ public class PushMsgAdapter extends RecyclerView.Adapter<PushMsgAdapter.PushMsgV
         this.dataset = new ArrayList<PushMsg>();
     }
 
-    public void setNotes(@NonNull List<PushMsg> pushMsgs) {
+    public void setMsgs(@NonNull List<PushMsg> pushMsgs) {
         dataset = pushMsgs;
         notifyDataSetChanged();
     }
 
-    public PushMsg getNote(int position) {
+    public PushMsg getMsg(int position) {
         return dataset.get(position);
     }
 

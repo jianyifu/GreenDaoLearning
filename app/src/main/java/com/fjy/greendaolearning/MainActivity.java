@@ -1,5 +1,6 @@
 package com.fjy.greendaolearning;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity{
     private PushMsgAdapter.MsgClickListener msgClickListener;
     private Button doQueryBtn;
     private TextView queryResult;
+    private Button enterQueryBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +49,14 @@ public class MainActivity extends AppCompatActivity{
 
     private void updateMsgList() {
         List<PushMsg> notes = msgQuery.list();
-        pushAdapter.setNotes(notes);
+        pushAdapter.setMsgs(notes);
     }
 
     private void setUpViews() {
         addMsgBtn = (Button) findViewById(R.id.add_msg_btn);
         doQueryBtn = (Button) findViewById(R.id.do_query_btn);
         queryResult = (TextView) findViewById(R.id.query_result);
+        enterQueryBtn = (Button) findViewById(R.id.enter_query_btn);
         msgList = (RecyclerView) findViewById(R.id.msg_list);
         msgList.setLayoutManager(new LinearLayoutManager(this));
         msgClickListener = new PushMsgAdapter.MsgClickListener() {
@@ -77,6 +80,12 @@ public class MainActivity extends AppCompatActivity{
             }
 
 
+        });
+        enterQueryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,QueryActivity.class));
+            }
         });
     }
     private void addMsg() {
