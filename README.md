@@ -1,9 +1,13 @@
 #GreenDao 3.0 学习
+
 ##简介
+
 ###GreenDao 是什么
+
 [GreenDao官网链接](http://greenrobot.org/greendao/) 
 
 ####Entity中@Unique与@Index(unique = true)
+
 Entity类中存在@Unique与@Index 时的pojo类与SQL
 
 `public class PushMsg {
