@@ -19,7 +19,9 @@ import java.util.Date;
 public class PushMsg {
     @Id(autoincrement = true)
     private Long id;
+//    @Unique
     private String title;
+//    @Index(unique = true)
     private String description;
     private Boolean isRead;
     private Integer type;
