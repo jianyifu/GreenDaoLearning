@@ -91,7 +91,8 @@ public class MainActivity extends AppCompatActivity{
         updateMsgList();
     }
     private void doQueryOnOneSession() {
-
+        pushMsgDao.detachAll();//To clear the identity scope for just a single DAO:
+//        DBManager.getInstance().getDaoSession().clear();//To clear the identity scope of the whole session so no “cached” objects are returned:
         List msgs = pushMsgDao.queryBuilder()
                 .where(PushMsgDao.Properties.Id.eq("1"))
                 .list();
