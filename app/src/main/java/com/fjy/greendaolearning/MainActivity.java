@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fjy.greendaolearning.db.DBManager;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity{
     private Query<PushMsg> msgQuery;
     private PushMsgAdapter pushAdapter;
     private PushMsgAdapter.MsgClickListener msgClickListener;
+    private Button doQueryBtn;
+    private TextView queryResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity{
 
     private void setUpViews() {
         addMsgBtn = (Button) findViewById(R.id.add_msg_btn);
+        doQueryBtn = (Button) findViewById(R.id.do_query_btn);
+        queryResult = (TextView) findViewById(R.id.query_result);
         msgList = (RecyclerView) findViewById(R.id.msg_list);
         msgList.setLayoutManager(new LinearLayoutManager(this));
         msgClickListener = new PushMsgAdapter.MsgClickListener() {
@@ -65,6 +70,14 @@ public class MainActivity extends AppCompatActivity{
                 addMsg();
             }
         });
+        doQueryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doQueryOnOneSession();
+            }
+
+
+        });
     }
     private void addMsg() {
         final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
@@ -76,5 +89,12 @@ public class MainActivity extends AppCompatActivity{
         pushMsgDao.insert(msg);
         Log.d(TAG, "Inserted new note, ID: " + msg.getId());
         updateMsgList();
+    }
+    private void doQueryOnOneSession() {
+
+        List msgs = pushMsgDao.queryBuilder()
+                .where(PushMsgDao.Properties.Id.eq("1"))
+                .list();
+        queryResult.setText(queryResult.getText()+(msgs==null?"null":msgs.toString()));
     }
 }

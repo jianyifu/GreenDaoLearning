@@ -12,6 +12,18 @@
         android:layout_height="wrap_content"
         android:text="add a msg" />
 
+        <Button
+            android:id="@+id/do_query_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="doQureyOnOneSession" />
+        <TextView
+            android:id="@+id/query_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="QueryResult:"/>
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/msg_list"
         android:layout_width="match_parent"
